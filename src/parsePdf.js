@@ -25,17 +25,31 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
     book[page] = sortRows(page)
 
     let header = []
-    return Object.values(book).map(page => {
-      const [specialty] = getSpecialty(page)
-      if (!header.length) header = getHeader(page)
-      let opponents = getOpponents(page)
+    return Object.values(
+      Object.values(book)
+        .map(page => {
+          const [specialty] = getSpecialty(page)
+          if (!header.length) header = getHeader(page)
+          let opponents = getOpponents(page)
 
-      return {
-        specialty,
-        header,
-        opponents,
-      }
-    })
+          return {
+            specialty,
+            header,
+            opponents,
+          }
+        })
+        .reduce((acc, curr) => {
+          if (acc[curr.specialty]) {
+            acc[curr.specialty].opponents = [
+              ...acc[curr.specialty].opponents,
+              ...curr.opponents,
+            ]
+          } else {
+            acc[curr.specialty] = curr
+          }
+          return acc
+        }, {})
+    )
   }
 
   function getSpecialty(page) {
