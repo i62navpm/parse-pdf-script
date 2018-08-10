@@ -1,0 +1,11 @@
+{
+  "name": "script-parse-pdf",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "author": "Manuel Navarro Pérez",
+  "license": "ISC",
+  "description": ""
+}
