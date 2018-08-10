@@ -22,9 +22,8 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "module-alias": "^2.1.0",
+    "pdfreader": "^0.2.5",
     "prettier": "1.14.2"
-  },
-  "dependencies": {
-    "module-alias": "^2.1.0"
   }
 }
