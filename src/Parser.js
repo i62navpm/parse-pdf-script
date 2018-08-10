@@ -7,6 +7,8 @@ module.exports = class Parser {
   constructor(file) {
     this.file = file
     this.readFile = util.promisify(fs.readFile)
+
+    return this.parse()
   }
 
   async parse() {
