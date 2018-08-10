@@ -71,3 +71,9 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Configuration files
+config
+
+# Pdf files
+pdfFiles

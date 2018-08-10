@@ -8,6 +8,11 @@
   "author": "Manuel Navarro Pérez",
   "license": "ISC",
   "description": "",
+  "_moduleAliases": {
+    "@src": "src/",
+    "@config": "config/",
+    "@pdfFiles": "pdfFiles/"
+  },
   "devDependencies": {
     "eslint": "^5.3.0",
     "eslint-config-prettier": "^2.9.0",
@@ -18,5 +23,8 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "prettier": "1.14.2"
+  },
+  "dependencies": {
+    "module-alias": "^2.1.0"
   }
 }
