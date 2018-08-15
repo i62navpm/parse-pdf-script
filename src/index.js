@@ -7,9 +7,11 @@ const log = debug('app:log')
 
 async function main(
   pdfFiles = require('@config/filesConfig'),
+  streamHandler = require('@src/fileStreamHandler'),
   send2File = true
 ) {
   const outputFile = 'pdfFiles'
+
   function save2Json(value) {
     const fileRegex = /.*\/(\D+)\.\D{3}/gm
     value.map((data, index) => {
@@ -24,9 +26,12 @@ async function main(
       })
     })
   }
+
+  const ps = new Parser(streamHandler)
+
   let promises = pdfFiles.map(file => {
     log(`Parsing the file: "${file}"`)
-    return new Parser(file)
+    return ps.parser(file)
   })
 
   let result = await Promise.all(promises)

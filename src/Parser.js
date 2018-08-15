@@ -1,23 +1,14 @@
 const pdfreader = require('pdfreader')
-const fs = require('fs')
-const util = require('util')
 const parsePdf = require('@src/parsePdf')()
 
 module.exports = class Parser {
-  constructor(file) {
-    this.file = file
-    this.readFile = util.promisify(fs.readFile)
-
-    return this.parse()
+  constructor(getFileStream) {
+    this.getFileStream = getFileStream
   }
 
-  async parse() {
-    const fileBuffer = await this.getFileStream(this.file)
+  async parser(file) {
+    const fileBuffer = await this.getFileStream(file)
     return this.readPdfFile(fileBuffer)
-  }
-
-  async getFileStream(file) {
-    return this.readFile(file)
   }
 
   async readPdfFile(buffer) {
