@@ -1,12 +1,15 @@
 const regexs = require('@config/regexRules')
+const getCollection = require('./getCollections')
 
 module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
   function insertRows(item) {
     const posY = +item.y.toFixed(2)
 
+    const posX = +item.x.toFixed(0)
+
     rows[posY] = !rows[posY]
-      ? [item.text.trim()]
-      : [...rows[posY], item.text.trim()]
+      ? [`${item.text.trim()}>>>${posX}`]
+      : [...rows[posY], `${item.text.trim()}>>>${posX}`]
   }
 
   function insertPage(item) {
@@ -21,11 +24,13 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
       .map(y => rows[y])
   }
 
-  function parseBook() {
+  function parseBook(filename) {
+    const getCollect = getCollection(filename)
+    let header = []
+
     book[page] = sortRows(page)
 
-    let header = []
-    return Object.values(
+    book = Object.values(
       Object.values(book)
         .map(page => {
           const [specialty] = getSpecialty(page)
@@ -50,6 +55,8 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
           return acc
         }, {})
     )
+    book = getCollect(book)
+    return book
   }
 
   function getSpecialty(page) {
@@ -59,6 +66,7 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
           row.findIndex(element => element.match(regexs.specialtyRegx)) !== -1
       )
       .filter(element => !element.match(regexs.specialtyRegx))
+      .map(parseSpecialty)
   }
 
   function getHeader(page) {
@@ -76,6 +84,15 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
           element.match(regexs.opponentsRegexB)
       )
     )
+  }
+
+  function parseSpecialty(value) {
+    return removePositionX(value)
+      .replace(/\s/g, '')
+      .toLowerCase()
+  }
+  function removePositionX(value) {
+    return value.replace(/(.*)(>>>.+)/gi, `$1`)
   }
 
   return {

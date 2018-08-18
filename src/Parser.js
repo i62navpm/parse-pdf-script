@@ -1,5 +1,5 @@
 const pdfreader = require('pdfreader')
-const parsePdf = require('@src/parsePdf')()
+const parsePdf = require('@src/parsePdf')
 
 module.exports = class Parser {
   constructor(getFileStream) {
@@ -8,16 +8,17 @@ module.exports = class Parser {
 
   async parser(file) {
     const fileBuffer = await this.getFileStream(file)
-    return this.readPdfFile(fileBuffer)
+    return this.readPdfFile(file, fileBuffer)
   }
 
-  async readPdfFile(buffer) {
+  async readPdfFile(file, buffer) {
     return new Promise((resolve, reject) => {
+      let parsePdfFn = parsePdf()
       new pdfreader.PdfReader().parseBuffer(buffer, (err, item) => {
         if (err) return reject(err)
-        else if (!item) return resolve(parsePdf.parseBook())
-        else if (item.page) parsePdf.insertPage(item)
-        else if (item.text) parsePdf.insertRows(item)
+        else if (!item) resolve(parsePdfFn.parseBook(file))
+        else if (item.page) parsePdfFn.insertPage(item)
+        else if (item.text) parsePdfFn.insertRows(item)
       })
     })
   }
