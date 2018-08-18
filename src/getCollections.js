@@ -1,12 +1,21 @@
 const watchFiles = require('@config/watchFiles')
 
+function removePositionX(value) {
+  return value.replace(/(.*)(>>>.+)/gi, `$1`)
+}
+
 module.exports = function getCollection(filename) {
   const fileRegex = /.*\/(\D+)/gm
   filename = filename.replace(fileRegex, `$1`)
+  function parseSpecialty(value) {
+    return removePositionX(value)
+      .replace(/\s/g, '')
+      .toLowerCase()
+  }
 
   function parseLists(book) {
     return book.reduce((acc, { specialty, header, opponents }) => {
-      acc[specialty] = opponents.map(opp => {
+      acc[parseSpecialty(specialty)] = opponents.map(opp => {
         return header.reduce((acc, curr, index) => {
           if (!opp[index]) return acc
           const [keyOpp, posXOpp] = opp[index].split('>>>')
@@ -57,9 +66,16 @@ module.exports = function getCollection(filename) {
       return true
     }
 
+    function parseSpecialty(value) {
+      return removePositionX(value)
+        .replace(' ', '-')
+        .replace(/\s/g, '')
+        .toLowerCase()
+    }
+
     let customHeader
     book = book.reduce((acc, { specialty, header, opponents }) => {
-      acc[specialty] = opponents.map(opp => {
+      acc[parseSpecialty(specialty)] = opponents.map(opp => {
         if (!customHeader) customHeader = splitCustomHeader(header)
         return header.reduce((acc, curr, index) => {
           if (!opp[index]) return acc

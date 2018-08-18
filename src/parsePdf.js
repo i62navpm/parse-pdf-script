@@ -66,7 +66,6 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
           row.findIndex(element => element.match(regexs.specialtyRegx)) !== -1
       )
       .filter(element => !element.match(regexs.specialtyRegx))
-      .map(parseSpecialty)
   }
 
   function getHeader(page) {
@@ -84,15 +83,6 @@ module.exports = function(page = 1, book = { [page]: [] }, rows = {}) {
           element.match(regexs.opponentsRegexB)
       )
     )
-  }
-
-  function parseSpecialty(value) {
-    return removePositionX(value)
-      .replace(/\s/g, '')
-      .toLowerCase()
-  }
-  function removePositionX(value) {
-    return value.replace(/(.*)(>>>.+)/gi, `$1`)
   }
 
   return {
