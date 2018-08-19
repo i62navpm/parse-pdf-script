@@ -1,44 +1,34 @@
 require('module-alias/register')
-const fs = require('fs')
-const Parser = require('@src/Parser')
-const debug = require('debug')
-const error = debug('app:error')
-const log = debug('app:log')
 
-async function main(
-  pdfFiles = require('@config/filesConfig'),
-  streamHandler = require('@src/fileStreamHandler'),
-  send2File = true
-) {
-  const outputFile = 'pdfFiles'
+const { getStreamFile, saveFile } = require('./utils/files')
+const pdfFiles = require('@config/filesConfig')
+const Parser = require('parse-pdf-script')
 
-  function save2Json(value) {
-    const fileRegex = /.*\/(\D+)\.\D{3}/gm
-    value.map((data, index) => {
-      let filename = pdfFiles[index].replace(fileRegex, `${outputFile}/$1.json`)
-
-      fs.writeFile(filename, JSON.stringify(data), err => {
-        if (err) {
-          return error(err)
-        }
-
-        log(`The file: "${filename}" was saved!`)
-      })
-    })
+async function main(list, buffer) {
+  const parserFn = new Parser(list, buffer)
+  try {
+    return parserFn.readPdfFile()
+  } catch (err) {
+    console.log(err)
   }
-
-  const ps = new Parser(streamHandler)
-
-  let promises = pdfFiles.map(file => {
-    log(`Parsing the file: "${file}"`)
-    return ps.parser(file)
-  })
-
-  let result = await Promise.all(promises)
-
-  send2File && save2Json(result)
-
-  return result
 }
+;(async function() {
+  for (const [typeList, lists] of Object.entries(pdfFiles)) {
+    console.log(`---> Parsing the "${typeList.toUpperCase()}" lists`)
+    for (let [list, filename] of Object.entries(lists)) {
+      console.log(`Parsing the "${list.toUpperCase()}" list...`)
+      try {
+        let data = await getStreamFile(filename)
+        data = await main(list, data)
+        filename = filename.split('.')[0] + '.json'
+        await saveFile(filename, data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        console.log(`Parsed the "${list.toUpperCase()}" succesfully!`)
+      }
+    }
+  }
+})()
 
 module.exports = main

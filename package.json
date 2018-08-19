@@ -1,5 +1,5 @@
 {
-  "name": "parse-pdf-script",
+  "name": "parse-pdf",
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
@@ -26,5 +26,8 @@
     "module-alias": "^2.1.0",
     "pdfreader": "^0.2.5",
     "prettier": "1.14.2"
+  },
+  "dependencies": {
+    "parse-pdf-script": "^0.0.8"
   }
 }

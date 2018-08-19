@@ -815,6 +815,12 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
+parse-pdf-script@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/parse-pdf-script/-/parse-pdf-script-0.0.8.tgz#78541b88f816f7c189e1ef03ca14c45cd864faf4"
+  dependencies:
+    pdfreader "^0.2.5"
+
 path-exists@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-2.1.0.tgz#0feb6c64f0fc518d9a754dd5efb62c7022761f4b"
