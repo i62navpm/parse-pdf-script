@@ -28,6 +28,6 @@
     "prettier": "1.14.2"
   },
   "dependencies": {
-    "parse-pdf-script": "^0.0.8"
+    "parse-pdf-script": "^0.0.9"
   }
 }
